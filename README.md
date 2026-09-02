@@ -2,6 +2,17 @@
 
 Detta Apps Script-projekt synkroniserar Chalmers TimeEdit till Google Calendar och skapar även en separat kalender för läsåret 2026/2027.
 
+
+## OBS Lägg in din länk till TimeView calender länken 
+
+ /*
+   * VIKTIGT:
+   *
+   * Lägg här prenumerationslänken från TimeEdit som
+   * omfattar HELA terminen, inte "Rullande 4 veckor".
+   */
+  ICAL_URL:  'LÄNK_TILL_TIMEEDIT',
+
 ## Vad scriptet gör
 
 ### 1. TimeEdit-synk
