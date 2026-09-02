@@ -72,7 +72,7 @@ Funktionen är dublettsäker: om den körs igen försöker den återanvända red
 
 # Var koden körs
 
-Koden körs i **Google Apps Script**.
+Koden körs i **Google Apps Script** dvs https://script.google.com 
 
 Öppna projektet som innehåller filen:
 
