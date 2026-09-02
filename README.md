@@ -5,12 +5,11 @@ Detta Apps Script-projekt synkroniserar Chalmers TimeEdit till Google Calendar o
 
 ## OBS Lägg in din länk till TimeView calender länken 
 
- /*
    * VIKTIGT:
    *
    * Lägg här prenumerationslänken från TimeEdit som
    * omfattar HELA terminen, inte "Rullande 4 veckor".
-   */
+
   ICAL_URL:  'LÄNK_TILL_TIMEEDIT',
 
 ## Vad scriptet gör
