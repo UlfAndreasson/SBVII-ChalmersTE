@@ -43,7 +43,8 @@ function showScriptVersion() {{
 
 # 2) Always identify the running version in sync logs.
 sync_marker = "function syncTimeEdit() {\n\n  validateConfig_();"
-if "SCRIPT VERSION: ' +\n    SCRIPT_VERSION" not in code[code.find("function syncTimeEdit()"):code.find("function matchesMyGroup_")]:
+sync_slice = code[code.find("function syncTimeEdit()"):code.find("function matchesMyGroup_")]
+if "SCRIPT VERSION: ' +\n    SCRIPT_VERSION" not in sync_slice:
     if sync_marker not in code:
         raise RuntimeError("syncTimeEdit marker not found")
     code = code.replace(
@@ -82,16 +83,32 @@ if old_update in code:
 elif "needsColor ||\n          needsTime" in code:
     raise RuntimeError("needsColor still participates in needsUpdate")
 
-# 5) Existing events must not be recolored after metadata updates.
-color_write_re = re.compile(
-    r"\n\s*/\*\s*\n\s*\* Färg\.\s*\n\s*\*/\s*\n\s*if \(needsColor\) \{\s*\n\s*applyEventColor_\(\s*\n\s*calendar,\s*\n\s*event,\s*\n\s*colorId\s*\n\s*\);\s*\n\s*\}",
-    re.MULTILINE,
-)
-code, n = color_write_re.subn(
-    "\n\n        /*\n         * V8.1: ingen färgskrivning på befintliga events.\n         * Färgen ägs av användaren efter att eventet skapats.\n         */",
-    code,
-    count=1,
-)
+# 5) Existing events must never call applyEventColor_.
+old_color_write = """        /*
+         * VIKTIGT:
+         * Färg/label appliceras SIST.
+         * CalendarApp-skrivningar efter en custom label kan annars
+         * återställa eventets gamla legacy-färg.
+         */
+        if (needsColor) {
+
+          applyEventColor_(
+            calendar,
+            event,
+            colorId
+          );
+        }
+"""
+new_color_write = """        /*
+         * V8.1:
+         * Ingen färgskrivning på befintliga events.
+         * Färgen ägs av användaren efter att eventet skapats.
+         */
+"""
+if old_color_write in code:
+    code = code.replace(old_color_write, new_color_write, 1)
+elif "if (needsColor)" in code[code.find("BEFINTLIG BOKNING"):code.find("TA BORT SÅDANT")]:
+    raise RuntimeError("Existing color-write block was not migrated")
 
 # Safety check: in the existing-event section there may be no color-based update or color write.
 sync_start = code.index("function syncTimeEdit()")
@@ -163,13 +180,11 @@ En ren manuell färgändring ska alltså ge `Uppdaterade: 0` om inget annat har 
 
 '''
 
-# Drop the previous first H1 to avoid two top-level intro headings, keep the historical details below.
 readme_body = readme
 if readme_body.startswith("# Chalmers TimeEdit → Google Calendar"):
     first_newline = readme_body.find("\n")
     readme_body = readme_body[first_newline + 1:].lstrip("\n")
 
-# Avoid duplicating the v8.1 header if re-run.
 if f"**Current version:** `{VERSION}`" not in readme:
     readme = readme_header + readme_body
 
