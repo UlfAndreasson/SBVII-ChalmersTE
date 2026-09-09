@@ -1,55 +1,18 @@
 /*
- * ============================================================
- * CHALMERS TIMEEDIT -> GOOGLE CALENDAR
- * VERSION: v8.1-github-main-manual-colors-2026-09-09
- * BUILD DATE: 2026-09-09
- * SOURCE OF TRUTH: GitHub main / appscript.gs
+ * Chalmers TimeEdit -> Google Calendar
+ * Version: v8.1-github-main-manual-colors-2026-09-09
+ * Source: GitHub main / appscript.gs
  *
- * COLOR POLICY
- * - New TimeEdit events get their automatic color.
- * - Existing TimeEdit events are never auto-recolored by sync.
- * - Manual Google Calendar colors are preserved.
- * ============================================================
+ * SBVII-schema, grupp/person 103. Synk var 15:e minut.
+ * Titel: Rubrik · Aktivitet · Lokal · Hus | Position: lärare/personal
+ * Nya events får automatisk färg; manuella färger på befintliga events bevaras.
  */
-
-const SCRIPT_VERSION =
-  'v8.1-github-main-manual-colors-2026-09-09';
-
+const SCRIPT_VERSION = 'v8.1-github-main-manual-colors-2026-09-09';
 
 function showScriptVersion() {
-
-  console.log(
-    'SCRIPT VERSION: ' +
-    SCRIPT_VERSION
-  );
+  console.log('SCRIPT VERSION: ' + SCRIPT_VERSION);
 }
 
-
-/*
- * ============================================================
- * Chalmers TimeEdit -> Google Calendar
- * ============================================================
- *
- * Personligt schema för SBVII
- *
- * Mitt nummer: 103
- *
- * Gruppfilter:
- * #101-130  -> JA
- * #101-115  -> JA
- * #116-130  -> NEJ
- * #131-160  -> NEJ
- * osv.
- *
- * Ingen gruppangivelse -> JA
- *
- * Titel: Rubrik · Aktivitet · Lokal: XXX · Hus: XXX
- *
- * Position: Lärare / personal
- *
- * Automatisk synk: var 15:e minut
- * ============================================================
- */
 
 const CONFIG = {
 
