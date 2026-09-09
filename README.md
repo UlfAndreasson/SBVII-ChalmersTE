@@ -1,5 +1,30 @@
 # Chalmers TimeEdit → Google Calendar
 
+**Current version:** `v8.1-github-main-manual-colors-2026-09-09`
+
+## GitHub = source of truth
+
+Den aktuella koden ligger i `main/appscript.gs`.
+
+Arbetsflöde:
+
+1. Kopiera hela `appscript.gs` från GitHub `main`.
+2. Ersätt hela `Code.gs` i Google Apps Script.
+3. Ersätt endast `LÄNK_TILL_Timeedit` med din privata TimeEdit `.ics`-länk.
+4. Den privata TimeEdit-länken ska aldrig committas till GitHub.
+5. Kör `showScriptVersion()` och kontrollera versionsnumret.
+
+## V8.1: manuella färger
+
+- Nya TimeEdit-events får fortfarande automatisk färg.
+- Ett befintligt events färg är **inte** längre ett update-villkor.
+- Normal `syncTimeEdit()` skriver därför **inte om färgen** på befintliga events.
+- Om titel, tid, beskrivning eller lärare ändras uppdateras den datan, men färgen lämnas orörd.
+
+En ren manuell färgändring ska alltså ge `Uppdaterade: 0` om inget annat har ändrats.
+
+---
+
 Detta Apps Script-projekt synkroniserar Chalmers TimeEdit till Google Calendar och skapar även en separat kalender för läsåret 2026/2027.
 
 

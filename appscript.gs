@@ -1,5 +1,32 @@
 /*
  * ============================================================
+ * CHALMERS TIMEEDIT -> GOOGLE CALENDAR
+ * VERSION: v8.1-github-main-manual-colors-2026-09-09
+ * BUILD DATE: 2026-09-09
+ * SOURCE OF TRUTH: GitHub main / appscript.gs
+ *
+ * COLOR POLICY
+ * - New TimeEdit events get their automatic color.
+ * - Existing TimeEdit events are never auto-recolored by sync.
+ * - Manual Google Calendar colors are preserved.
+ * ============================================================
+ */
+
+const SCRIPT_VERSION =
+  'v8.1-github-main-manual-colors-2026-09-09';
+
+
+function showScriptVersion() {
+
+  console.log(
+    'SCRIPT VERSION: ' +
+    SCRIPT_VERSION
+  );
+}
+
+
+/*
+ * ============================================================
  * Chalmers TimeEdit -> Google Calendar
  * ============================================================
  *
@@ -283,6 +310,12 @@ function setup() {
 function syncTimeEdit() {
 
   validateConfig_();
+
+
+  console.log(
+    'SCRIPT VERSION: ' +
+    SCRIPT_VERSION
+  );
 
 
   const lock =
@@ -714,13 +747,12 @@ function syncTimeEdit() {
             ''
           );
 
-
+        /*
+         * V8.1: färg är aldrig ett update-villkor för ett
+         * befintligt TimeEdit-event. Manuella färger bevaras.
+         */
         const needsColor =
-          eventColorDiffers_(
-            calendar,
-            event,
-            colorId
-          );
+          false;
 
         const needsTime =
           eventTimeDiffers_(
@@ -733,7 +765,6 @@ function syncTimeEdit() {
           needsTitle ||
           needsDescription ||
           needsLocation ||
-          needsColor ||
           needsTime;
 
 
@@ -815,19 +846,10 @@ function syncTimeEdit() {
 
 
         /*
-         * VIKTIGT:
-         * Färg/label appliceras SIST.
-         * CalendarApp-skrivningar efter en custom label kan annars
-         * återställa eventets gamla legacy-färg.
+         * V8.1:
+         * Ingen färgskrivning på befintliga events.
+         * Färgen ägs av användaren efter att eventet skapats.
          */
-        if (needsColor) {
-
-          applyEventColor_(
-            calendar,
-            event,
-            colorId
-          );
-        }
 
 
         updated++;
@@ -3391,6 +3413,13 @@ function validateConfig_() {
     CONFIG.ICAL_URL
       .includes(
         'KLISTRA_IN'
+      )
+
+    ||
+
+    CONFIG.ICAL_URL
+      .includes(
+        'LÄNK_TILL'
       )
   ) {
 
